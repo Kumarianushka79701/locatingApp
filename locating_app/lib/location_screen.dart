@@ -14,6 +14,12 @@ class _LocationScreenState extends State<LocationScreen> {
   String _currentAddress = '';
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _getLocation();
+  }
+
   Future<void> _getLocation() async {
     setState(() {
       _isLoading = true; 
@@ -38,7 +44,7 @@ class _LocationScreenState extends State<LocationScreen> {
       if (permission != LocationPermission.whileInUse &&
           permission != LocationPermission.always) {
         setState(() {
-          _isLoading = false; // Stop loading
+          _isLoading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Location permission is denied.")),
@@ -90,32 +96,41 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title:const Text(
-          'Location Details',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-            fontSize: 18,
-          ),
-        ),
-        backgroundColor: Colors.blue,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,color: Colors.white,),
-          onPressed: () {Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
-      );},
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      centerTitle: true,
+      title: const Text(
+        'Location Details',
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+          fontSize: 18,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      backgroundColor: Colors.blue,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back, color: Colors.white),
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+          );
+        },
+      ),
+    ),
+    body: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (_isLoading)
+            Center(
+              child: CircularProgressIndicator(),
+            )
+          else ...[
             if (_distance != null)
               Card(
                 elevation: 4,
@@ -143,7 +158,7 @@ class _LocationScreenState extends State<LocationScreen> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
-                  _currentAddress,
+                  _currentAddress.isEmpty ? "Loading..." : _currentAddress,
                   style: TextStyle(fontSize: 16),
                 ),
               ),
@@ -151,9 +166,7 @@ class _LocationScreenState extends State<LocationScreen> {
             SizedBox(height: 20),
             Center(
               child: ElevatedButton.icon(
-                onPressed: _isLoading
-                    ? null
-                    : _getLocation,
+                onPressed: _isLoading ? null : _getLocation,
                 icon: _isLoading
                     ? SizedBox(
                         width: 20,
@@ -180,8 +193,9 @@ class _LocationScreenState extends State<LocationScreen> {
               ),
             ),
           ],
-        ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
