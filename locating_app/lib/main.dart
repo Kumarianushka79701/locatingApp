@@ -14,12 +14,10 @@ class MyApp extends StatelessWidget {
       title: 'Locating App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        
-        
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:  LoginScreen(),
+      home:const LoginScreen(),
     );
   }
 }

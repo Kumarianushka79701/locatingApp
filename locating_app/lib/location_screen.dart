@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:locating_app/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
   Future<void> _getLocation() async {
     setState(() {
-      _isLoading = true; // Start loading
+      _isLoading = true; 
     });
 
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -23,7 +24,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
     if (!serviceEnabled) {
       setState(() {
-        _isLoading = false; // Stop loading
+        _isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Location services are disabled.")),
@@ -83,7 +84,7 @@ class _LocationScreenState extends State<LocationScreen> {
       );
     } finally {
       setState(() {
-        _isLoading = false; // Stop loading
+        _isLoading = false;
       });
     }
   }
@@ -103,8 +104,11 @@ class _LocationScreenState extends State<LocationScreen> {
         ),
         backgroundColor: Colors.blue,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {},
+          icon: Icon(Icons.arrow_back,color: Colors.white,),
+          onPressed: () {Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );},
         ),
       ),
       body: Padding(
@@ -148,7 +152,7 @@ class _LocationScreenState extends State<LocationScreen> {
             Center(
               child: ElevatedButton.icon(
                 onPressed: _isLoading
-                    ? null // Disable button while loading
+                    ? null
                     : _getLocation,
                 icon: _isLoading
                     ? SizedBox(
